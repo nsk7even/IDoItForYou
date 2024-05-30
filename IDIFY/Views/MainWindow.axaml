@@ -18,7 +18,8 @@
     </Design.DataContext>
     
     <Window.Resources>
-        <valueConverters:DirectoryInfoToStringConverter x:Key="DirectoryConverter" />
+        <valueConverters:DirectoryInfoConverter x:Key="DirectoryConverter" />
+        <valueConverters:FileInfoConverter x:Key="FileConverter" />
     </Window.Resources>
     
     <Window.Styles>
@@ -28,6 +29,10 @@
         <Style Selector="Button">
             <!-- <Setter Property="Margin" Value="10 0" /> -->
             <Setter Property="Padding" Value="5" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.grid">
+            <Setter Property="Width" Value="50" />
         </Style>
         <Style Selector="TextBox">
             <Setter Property="Margin" Value="5" />
@@ -38,7 +43,7 @@
         </Style>
     </Window.Styles>
     
-    <!-- Classes="mark" -->
+    <!-- Use this attribute for quick visual debugging: Classes="mark" -->
     <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -47,7 +52,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="40" />
+            <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         
         <!-- Input -->
@@ -66,18 +71,35 @@
             </Grid.RowDefinitions>
 
             <Label Grid.ColumnSpan="3" Content="Input" FontWeight="UltraBold" FontSize="20" />
+            
             <Label Grid.Row="1" Content="Directory:" />
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Directory, Converter={StaticResource DirectoryConverter}}" />
-            <Button Grid.Row="1" Grid.Column="2" Name="ChooseDirectory" Content="..." Click="ChooseDirectory_OnClick" HorizontalContentAlignment="Center" Width="50" />
+            <Button Grid.Row="1" Grid.Column="2" Name="ChooseDirectory" Content="..." Classes="grid" Click="ChooseDirectory_OnClick" />
+            
             <Label Grid.Row="2" Content="Filter Expression:" />
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FilterExpression}" />
+            <!-- <Button Grid.Row="2" Grid.Column="2" Content="Filter" Classes="grid" /> -->
+            
             <Label Grid.Row="3" Grid.Column="0" Content="Data Element Expression:" />
-            <TextBox Grid.Row="3" Grid.Column="1"  Text="{Binding DataElementExpression}" />
-            <ListBox Grid.Row="4" Grid.ColumnSpan="3" ItemsSource="{Binding InputFiles}" Width="600" Margin="0 10" />
+            <TextBox Grid.Row="3" Grid.Column="1" x:Name="DataExpr" Text="{Binding DataElementExpression}" />
+            <Button Grid.Row="3" Grid.Column="2" Content="Apply" Classes="grid" Command="{Binding ApplyInputParameters}" />
+            
+            <ListBox Grid.Row="4" Grid.ColumnSpan="3" ItemsSource="{Binding InputFiles}" Width="600" Margin="0 10"
+                     ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.AllowAutoHide="False">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding}" />
+                            <TextBlock Text="{Binding Converter={StaticResource FileConverter}
+                                , ConverterParameter={Binding ElementName=DataExpr, Path=Text}}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
         
         <!-- Buttons -->
-        <Button Grid.Row="1" Grid.ColumnSpan="3" Name="Run" Content="Run" Width="300" HorizontalContentAlignment="Center" />
+        <Button Grid.Row="1" Grid.ColumnSpan="3" Name="Run" Content="Run" Width="300" Margin="0 30 0 0" HorizontalContentAlignment="Center" />
     </Grid>
 
 </Window>

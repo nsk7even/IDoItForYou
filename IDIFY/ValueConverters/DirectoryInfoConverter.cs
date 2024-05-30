@@ -5,7 +5,7 @@ using Avalonia.Data.Converters;
 
 namespace IDIFY.ValueConverters;
 
-public class DirectoryInfoToStringConverter : IValueConverter
+public class DirectoryInfoConverter : IValueConverter
 {
     /// <summary>
     /// Converts DirectoryInfo to string, using DirectoryInfo.FullName
@@ -32,12 +32,12 @@ public class DirectoryInfoToStringConverter : IValueConverter
                 }
                 else
                 {
-                    throw new ArgumentException($"{nameof(DirectoryInfoToStringConverter)}.Convert({value}, {targetType}, {parameter}): value is of wrong type!");
+                    throw new ArgumentException($"{nameof(DirectoryInfoConverter)}.Convert({value}, {targetType}, {parameter}): value is of wrong type!");
                 }
             }
             catch (Exception e)
             {
-                throw new ArgumentException($"{nameof(DirectoryInfoToStringConverter)}.Convert({value}, {targetType}, {parameter}): ERROR: {e.Message}");
+                throw new ArgumentException($"{nameof(DirectoryInfoConverter)}.Convert({value}, {targetType}, {parameter}): ERROR: {e.Message}");
             }
         }
     }
@@ -65,7 +65,7 @@ public class DirectoryInfoToStringConverter : IValueConverter
         }
         catch (Exception e)
         {
-            throw new ArgumentException($"{nameof(DirectoryInfoToStringConverter)}.ConvertBack({value}, {targetType}, {parameter}): ERROR: {e.Message}");
+            throw new ArgumentException($"{nameof(DirectoryInfoConverter)}.ConvertBack({value}, {targetType}, {parameter}): ERROR: {e.Message}");
         }
     }
 }

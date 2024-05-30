@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
+using System.Reactive;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
@@ -9,6 +10,7 @@ namespace IDIFY.ViewModels;
 public class MainWindowViewModel : ViewModelBase
 {
     private DirectoryInfo? _directory = null;
+    private string _filterExpression = "*.*";
 
     public DirectoryInfo? Directory
     {
@@ -20,14 +22,31 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public string FilterExpression { get; set; } = "*.*";
+    public string FilterExpression
+    {
+        get => _filterExpression;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _filterExpression, value);
+            ScanInputDirectory();
+        }
+    }
+
     public string DataElementExpression { get; set; } = ".*";
     public ObservableCollection<FileInfo> InputFiles { get; set; } = [];
+    
+    public ReactiveCommand<Unit, Unit> ApplyInputParameters { get; }
+
+    public MainWindowViewModel()
+    {
+        ApplyInputParameters = ReactiveCommand.Create(ScanInputDirectory);
+    }
 
     private void ScanInputDirectory()
     {
         if (Directory != null)
         {
+            InputFiles.Clear();
             InputFiles.Add(Directory.EnumerateFiles(FilterExpression, SearchOption.AllDirectories));
         }
     }
