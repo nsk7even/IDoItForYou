@@ -3,6 +3,7 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="IDIFY/App.axaml" value="IDIFY/IDIFY.csproj" />
         <entry key="IDIFY/Views/MainWindow.axaml" value="IDIFY/IDIFY.csproj" />
       </map>
     </option>

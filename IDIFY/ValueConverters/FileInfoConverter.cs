@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using Avalonia.Data.Converters;
+using IDIFY.ViewModels;
 
 namespace IDIFY.ValueConverters;
 
@@ -29,6 +30,8 @@ public class FileInfoConverter : IValueConverter
             {
                 if (value is FileInfo file)
                 {
+                    // ugly workaround as ConverterParameter always brings an Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindingExtension
+                    return Regex.Match(file.FullName, MainWindowViewModel.DataElementExpressionStatic).Value;
                     if (parameter is string dataExpression)
                     {
                         Console.WriteLine("FileInfoConverter doing regex with: " + dataExpression);

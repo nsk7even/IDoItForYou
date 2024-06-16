@@ -9,6 +9,8 @@ namespace IDIFY.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
+    public static string DataElementExpressionStatic = "\\..*";
+    
     private DirectoryInfo? _directory = null;
     private string _filterExpression = "*.*";
 
@@ -32,7 +34,15 @@ public class MainWindowViewModel : ViewModelBase
         }
     }
 
-    public string DataElementExpression { get; set; } = ".*";
+    public string DataElementExpression
+    {
+        get => DataElementExpressionStatic;
+        set
+        {
+            DataElementExpressionStatic = value;   
+        }
+    }
+    
     public ObservableCollection<FileInfo> InputFiles { get; set; } = [];
     
     public ReactiveCommand<Unit, Unit> ApplyInputParameters { get; }
