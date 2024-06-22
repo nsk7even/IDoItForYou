@@ -1,59 +1,58 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using Avalonia.Data.Converters;
-using IDIFY.ViewModels;
 
 namespace IDIFY.ValueConverters;
 
-public class FileInfoConverter : IValueConverter
+public class FileInfoConverter : IMultiValueConverter
 {
     /// <summary>
     /// Converts FileInfo via custom logic to a string representation
     /// </summary>
-    /// <param name="value">FileInfo object</param>
-    /// <param name="targetType"></param>
-    /// <param name="parameter">Regular expression to apply on full filename (complete path + filename)</param>
-    /// <param name="culture"></param>
+    /// <param name="values">FileInfo object and string object that is interpreted as data expression (regex)</param>
+    /// <param name="targetType">not used</param>
+    /// <param name="parameter">not used</param>
+    /// <param name="culture">not used</param>
     /// <returns>String, containing informational piece of the original FileInfo</returns>
-    /// <exception cref="ArgumentException"></exception>
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    /// <exception cref="ArgumentException">if no FileInfo object is in <paramref name="values"/></exception>
+    public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value == null)
+        FileInfo? fileInfo = null;
+        string? dataExpression = null;
+        
+        foreach (var value in values)
         {
-            return string.Empty;
-        }
-        else
-        {
-            try
+            if (value is FileInfo fi)
             {
-                if (value is FileInfo file)
-                {
-                    // ugly workaround as ConverterParameter always brings an Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindingExtension
-                    return Regex.Match(file.FullName, MainWindowViewModel.DataElementExpressionStatic).Value;
-                    if (parameter is string dataExpression)
-                    {
-                        Console.WriteLine("FileInfoConverter doing regex with: " + dataExpression);
-                        return Regex.Match(file.FullName, dataExpression).Value;
-                    }
-                    Console.WriteLine("FileInfoConverter returned fullname, parameter=" + parameter);
-                    return file.FullName;
-                }
-                else
-                {
-                    throw new ArgumentException($"{nameof(FileInfoConverter)}.Convert({value}, {targetType}, {parameter}): value is of wrong type!");
-                }
+                fileInfo = fi;
             }
-            catch (Exception e)
+            else if (value is string s)
             {
-                throw new ArgumentException($"{nameof(FileInfoConverter)}.Convert({value}, {targetType}, {parameter}): ERROR: {e.Message}");
+                dataExpression = s;
             }
         }
-    }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        return null;
+        if (fileInfo != null)
+        {
+            if (dataExpression != null)
+            {
+                try
+                {
+                    if (App.Debug) Console.WriteLine("FileInfoConverter doing regex with: " + dataExpression);
+                    return Regex.Match(fileInfo.FullName, dataExpression).Value;
+                }
+                catch (Exception e)
+                {
+                    throw new Exception($"{nameof(FileInfoConverter)} PROCESSING ERROR: {e}");
+                }
+            }
+            if (App.Debug) Console.WriteLine("FileInfoConverter returned fullname, parameter=" + parameter);
+            return fileInfo.FullName;
+        }
+
+        throw new ArgumentException($"{nameof(FileInfoConverter)} ERROR: no FileInfo in values array!");
     }
 }
