@@ -8,6 +8,8 @@ namespace IDIFY;
 
 public partial class App : Application
 {
+    public static bool Debug = false;
+    
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
