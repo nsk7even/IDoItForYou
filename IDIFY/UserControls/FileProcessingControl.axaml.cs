@@ -12,8 +12,7 @@ namespace IDIFY.UserControls;
 
 public partial class FileProcessingControl : UserControl
 {
-    public static readonly StyledProperty<string> TitleProperty =
-        AvaloniaProperty.Register<FileProcessingControl, string>(nameof(TitleProperty), "Input");
+    public static readonly StyledProperty<string> TitleProperty = AvaloniaProperty.Register<FileProcessingControl, string>(nameof(TitleProperty), "Input"); 
     
     public string Title
     {

@@ -11,7 +11,7 @@
         x:Class="IDIFY.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Width="1260"
+        Width="1260" MinWidth="800" MinHeight="400"
         Title="IDIFY">
 
     <Design.DataContext>
@@ -24,12 +24,20 @@
         <valueConverters:DirectoryInfoConverter x:Key="DirectoryConverter" />
     </Window.Resources>
     
-    <!-- Use this attribute for quick visual debugging: Classes="mark" -->
+    <!-- Use this attributes on the grid for quick visual debugging:
+        Classes="mark"
+        ShowGridLines="True"
+    -->
     <Grid Margin="20">
+        <Grid.Styles>
+            <Style Selector="Grid.mark">
+                <Setter Property="Background" Value="Aquamarine" />
+            </Style>
+        </Grid.Styles>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <!-- <ColumnDefinition Width="Auto" /> -->
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -37,11 +45,11 @@
         </Grid.RowDefinitions>
         
         <!-- Input -->
-        <userControls:FileProcessingControl Margin="0 0 20 0" />
-        <userControls:FileProcessingControl Grid.Column="1" Title="Reference" />
+        <userControls:FileProcessingControl Title="Input 1" Margin="0 0 20 0" />
+        <userControls:FileProcessingControl Grid.Column="1" Title="Input 2" />
         
         <!-- Buttons -->
-        <Button Grid.Row="1" Grid.ColumnSpan="3" Name="Run" Content="Run" Width="300" Margin="0 30 0 0" HorizontalContentAlignment="Center" />
+        <Button Grid.Row="1" Grid.ColumnSpan="2" Name="Run" Content="Run" Width="300" Margin="0 30 0 0" HorizontalContentAlignment="Center" />
     </Grid>
 
 </Window>

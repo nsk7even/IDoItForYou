@@ -41,6 +41,7 @@
         </Style>
     </UserControl.Styles>
     
+    <!-- Use this attribute for quick visual debugging: Classes="mark" -->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -72,10 +73,10 @@
         <!-- <Button Grid.Row="3" Grid.Column="2" Content="Apply" Classes="grid" Command="{Binding ApplyInputParameters}" /> -->
 
         <DataGrid Grid.Row="4" Grid.ColumnSpan="3" ItemsSource="{Binding InputFiles}"
-                  Width="600" Margin="0 10" GridLinesVisibility="All"  BorderThickness="1" BorderBrush="Gray"
+                  Margin="0 10" GridLinesVisibility="All"  BorderThickness="1" BorderBrush="Gray"
                   HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Filename" MaxWidth="500" Binding="{Binding}" />
+                <DataGridTextColumn Header="Filename"  Binding="{Binding}" />
                 <DataGridTextColumn Header="Data Element">
                     <DataGridTextColumn.Binding>
                         <MultiBinding Converter="{StaticResource FileInfoConverter}">
@@ -87,7 +88,7 @@
             </DataGrid.Columns>
         </DataGrid>
         
-        <TextBlock Grid.Row="5" Text="{Binding Message}" />
+        <TextBlock Grid.Row="5" Grid.ColumnSpan="3" Text="{Binding Message}" />
     </Grid>
     
 </UserControl>
