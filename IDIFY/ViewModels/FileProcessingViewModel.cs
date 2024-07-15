@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive;
 using DynamicData;
+using IDIFY.Models;
 using ReactiveUI;
 
 namespace IDIFY.ViewModels;
@@ -13,6 +14,7 @@ public class FileProcessingViewModel : ViewModelBase
     private DirectoryInfo? _directory = null;
     private string _filterExpression = "*.*";
     private string _dataElementExpression = "\\..*";
+    private ApplicationState? _state;
 
     public string Message { get => _msg; set => this.RaiseAndSetIfChanged(ref _msg, value); }
     
@@ -49,6 +51,9 @@ public class FileProcessingViewModel : ViewModelBase
     public FileProcessingViewModel()
     {
         ApplyInputParameters = ReactiveCommand.Create(ScanInputDirectory);
+        _state = ServiceLocator.GetService<ApplicationState>();
+
+        if (_state == null) Message = "ERROR: internal state is not where it should be!";
     }
     
     private void ScanInputDirectory()
